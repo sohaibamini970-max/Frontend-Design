@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import {
     LayoutDashboard,
     User,
@@ -10,17 +10,7 @@ import {
     LogOut,
     GraduationCap,
 } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-
-// inside component:
-const { logout } = useAuth();
-const navigate = useNavigate();
-
-const handleLogout = () => {
-    logout();
-    navigate('/login');
-};
 
 const navItems = [
     { path: '/', label: 'Dashboard', icon: LayoutDashboard },
@@ -32,6 +22,15 @@ const navItems = [
 ];
 
 const Sidebar = () => {
+    // ✅ Hooks must be INSIDE the component
+    const { logout } = useAuth();
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+        logout();
+        navigate('/login', { replace: true });
+    };
+
     return (
         <aside className="fixed top-0 left-0 h-screen w-64 bg-white border-r border-gray-200 flex flex-col px-4 py-6 z-20">
             {/* Logo */}
@@ -65,7 +64,10 @@ const Sidebar = () => {
             </nav>
 
             {/* Logout */}
-            <button onClick={handleLogout} className="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-red-500 hover:bg-red-50 transition-all mt-4 border-t border-gray-100 pt-5">
+            <button
+                onClick={handleLogout}
+                className="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-red-500 hover:bg-red-50 transition-all mt-4 border-t border-gray-100 pt-5"
+            >
                 <LogOut size={18} />
                 <span>Logout</span>
             </button>
