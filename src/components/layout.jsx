@@ -2,6 +2,7 @@ import React from 'react';
 import { Outlet } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import Header from './Header';
+import ChatBot from './ChatBot'; // 👈 add this
 
 const Layout = () => {
     return (
@@ -13,6 +14,7 @@ const Layout = () => {
                     <Outlet />
                 </main>
             </div>
+            <ChatBot /> {/* 👈 add this at the end */}
         </div>
     );
 };
