@@ -10,6 +10,17 @@ import {
     LogOut,
     GraduationCap,
 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
+
+// inside component:
+const { logout } = useAuth();
+const navigate = useNavigate();
+
+const handleLogout = () => {
+    logout();
+    navigate('/login');
+};
 
 const navItems = [
     { path: '/', label: 'Dashboard', icon: LayoutDashboard },
@@ -54,7 +65,7 @@ const Sidebar = () => {
             </nav>
 
             {/* Logout */}
-            <button className="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-red-500 hover:bg-red-50 transition-all mt-4 border-t border-gray-100 pt-5">
+            <button onClick={handleLogout} className="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-red-500 hover:bg-red-50 transition-all mt-4 border-t border-gray-100 pt-5">
                 <LogOut size={18} />
                 <span>Logout</span>
             </button>
