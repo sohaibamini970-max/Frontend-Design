@@ -1,8 +1,8 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
-import ProtectedRoute from './components/ProtectedRoute';
-import Layout from './components/Layout';
+import ProtectedRoute from './components/protectedRoute';
+import Layout from './components/layout';
 import LoginPage from './pages/LoginPage';
 import Dashboard from './pages/Dashboard';
 import Profile from './pages/Profile';
