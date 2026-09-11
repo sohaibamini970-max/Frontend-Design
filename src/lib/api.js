@@ -1,4 +1,5 @@
-const API_URL = "https://backend-design.vercel.app/";
+// Strip trailing slash so we never build "//api/..." URLs
+const API_URL = "https://backend-design.vercel.app".replace(/\/+$/, "");
 
 export const api = {
     async login(email, password) {
