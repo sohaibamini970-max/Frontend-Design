@@ -15,6 +15,7 @@ import AdminRoute from './components/AdminRoute';
 import AdminStudents from './pages/admin/AdminStudents';
 import AdminTeachers from './pages/admin/AdminTeachers';
 import AdminCourses from './pages/admin/AdminCourses';
+import AdminManage from './pages/admin/AdminManage';
 
 const RootRedirect = () => {
     const { user, loading } = useAuth();
