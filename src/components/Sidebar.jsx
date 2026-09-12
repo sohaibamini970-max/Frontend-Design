@@ -21,10 +21,20 @@ const navItems = [
     { path: '/announcements', label: 'Announcements', icon: Megaphone },
 ];
 
+const adminNavItems = [
+    { path: '/admin/students', label: 'Add Student', icon: UserPlus },
+    { path: '/admin/teachers', label: 'Add Teacher', icon: UserPlus },
+    { path: '/admin/courses', label: 'Add Course', icon: BookPlus },
+];
+
 const Sidebar = () => {
     // ✅ Hooks must be INSIDE the component
     const { logout } = useAuth();
     const navigate = useNavigate();
+
+    const navItems = user?.role === 'admin'
+        ? [...baseNavItems, ...adminNavItems]
+        : baseNavItems;
 
     const handleLogout = () => {
         logout();

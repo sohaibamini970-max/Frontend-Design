@@ -11,10 +11,15 @@ import Timetable from './pages/Timetable';
 import Courses from './pages/Courses';
 import Announcements from './pages/Announcements';
 
+import AdminRoute from './components/AdminRoute';
+import AdminStudents from './pages/admin/AdminStudents';
+import AdminTeachers from './pages/admin/AdminTeachers';
+import AdminCourses from './pages/admin/AdminCourses';
+
 const RootRedirect = () => {
     const { user, loading } = useAuth();
     if (loading) return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
-    return <Navigate to={user ? "/" : "/login"} replace />;
+    return <Navigate to={user ? '/' : '/login'} replace />;
 };
 
 function App() {
@@ -23,6 +28,7 @@ function App() {
             <BrowserRouter>
                 <Routes>
                     <Route path="/login" element={<LoginPage />} />
+
                     <Route
                         path="/"
                         element={
@@ -31,13 +37,41 @@ function App() {
                             </ProtectedRoute>
                         }
                     >
+                        {/* Common routes */}
                         <Route index element={<Dashboard />} />
                         <Route path="profile" element={<Profile />} />
                         <Route path="attendance" element={<Attendance />} />
                         <Route path="timetable" element={<Timetable />} />
                         <Route path="courses" element={<Courses />} />
                         <Route path="announcements" element={<Announcements />} />
+
+                        {/* 🔒 Admin-only routes */}
+                        <Route
+                            path="admin/students"
+                            element={
+                                <AdminRoute>
+                                    <AdminStudents />
+                                </AdminRoute>
+                            }
+                        />
+                        <Route
+                            path="admin/teachers"
+                            element={
+                                <AdminRoute>
+                                    <AdminTeachers />
+                                </AdminRoute>
+                            }
+                        />
+                        <Route
+                            path="admin/courses"
+                            element={
+                                <AdminRoute>
+                                    <AdminCourses />
+                                </AdminRoute>
+                            }
+                        />
                     </Route>
+
                     <Route path="*" element={<RootRedirect />} />
                 </Routes>
             </BrowserRouter>
