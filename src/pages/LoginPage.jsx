@@ -16,8 +16,15 @@ const LoginPage = () => {
         setError('');
         setLoading(true);
         try {
-            await login(email, password);
-            navigate('/');
+            const user = await login(email, password);   // 👈 capture the user
+            // Route based on role
+            if (user.role === 'admin') {
+                navigate('/admin/manage', { replace: true });
+            } else if (user.role === 'teacher') {
+                navigate('/teacher', { replace: true });
+            } else {
+                navigate('/', { replace: true });
+            }
         } catch (err) {
             setError(err.message || 'Login failed');
         } finally {

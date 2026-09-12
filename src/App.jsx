@@ -17,10 +17,21 @@ import AdminTeachers from './pages/admin/AdminTeachers';
 import AdminCourses from './pages/admin/AdminCourses';
 import AdminManage from './pages/admin/AdminManage';
 
+import TeacherRoute from './components/TeacherRoute';
+import TeacherDashboard from './pages/teacher/TeacherDashboard';
+import TeacherProfile from './pages/teacher/TeacherProfile';
+import TeacherCourses from './pages/teacher/TeacherCourses';
+import TeacherAttendance from './pages/teacher/TeacherAttendance';
+import TeacherTimetable from './pages/teacher/TeacherTimetable';
+import TeacherAnnouncements from './pages/teacher/TeacherAnnouncements';
+
 const RootRedirect = () => {
     const { user, loading } = useAuth();
     if (loading) return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
-    return <Navigate to={user ? '/' : '/login'} replace />;
+    if (!user) return <Navigate to="/login" replace />;
+    if (user.role === 'admin') return <Navigate to="/admin/manage" replace />;
+    if (user.role === 'teacher') return <Navigate to="/teacher" replace />;
+    return <Navigate to="/" replace />;
 };
 
 function App() {
@@ -79,6 +90,13 @@ function App() {
                                 </AdminRoute>
                             }
                         />
+
+                        <Route path="teacher" element={<TeacherRoute><TeacherDashboard /></TeacherRoute>} />
+                        <Route path="teacher/profile" element={<TeacherRoute><TeacherProfile /></TeacherRoute>} />
+                        <Route path="teacher/courses" element={<TeacherRoute><TeacherCourses /></TeacherRoute>} />
+                        <Route path="teacher/attendance" element={<TeacherRoute><TeacherAttendance /></TeacherRoute>} />
+                        <Route path="teacher/timetable" element={<TeacherRoute><TeacherTimetable /></TeacherRoute>} />
+                        <Route path="teacher/announcements" element={<TeacherRoute><TeacherAnnouncements /></TeacherRoute>} />
                     </Route>
 
                     <Route path="*" element={<RootRedirect />} />

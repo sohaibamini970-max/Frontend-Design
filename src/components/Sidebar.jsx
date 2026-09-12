@@ -1,17 +1,8 @@
 import React from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import {
-    LayoutDashboard,
-    User,
-    CalendarCheck,
-    BookOpen,
-    Clock,
-    Megaphone,
-    LogOut,
-    GraduationCap,
-    UserPlus,
-    BookPlus,
-    Users,
+    LayoutDashboard, User, CalendarCheck, BookOpen, Clock,
+    Megaphone, LogOut, GraduationCap, UserPlus, BookPlus, Users,
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
@@ -31,13 +22,25 @@ const adminNavItems = [
     { path: '/admin/courses', label: 'Add Course', icon: BookPlus },
 ];
 
+const teacherNavItems = [
+    { path: '/teacher', label: 'Dashboard', icon: LayoutDashboard },
+    { path: '/teacher/profile', label: 'Profile', icon: User },
+    { path: '/teacher/attendance', label: 'Attendance', icon: CalendarCheck },
+    { path: '/teacher/courses', label: 'My Courses', icon: BookOpen },
+    { path: '/teacher/timetable', label: 'Timetable', icon: Clock },
+    { path: '/teacher/announcements', label: 'Announcements', icon: Megaphone },
+]; 
+
 const Sidebar = () => {
     // ✅ Hooks INSIDE the component
     const { user, logout } = useAuth();
     const navigate = useNavigate();
 
     // ✅ Pick items based on role
-    const navItems = user?.role === 'admin' ? adminNavItems : baseNavItems;
+    const navItems =
+        user?.role === 'admin' ? adminNavItems :
+            user?.role === 'teacher' ? teacherNavItems :
+                baseNavItems;
 
     const handleLogout = () => {
         logout();

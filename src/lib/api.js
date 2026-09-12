@@ -171,4 +171,67 @@ export const api = {
         if (!res.ok) await handleError(res, "Failed to delete user");
         return res.json();
     },
+
+    // =========================================================
+    // TEACHER
+    // =========================================================
+    async teacherDashboard() {
+        const res = await fetch(`${API_URL}/api/teacher/dashboard`, { headers: authHeaders() });
+        if (!res.ok) await handleError(res, "Failed to load dashboard");
+        return res.json();
+    },
+
+    async teacherCourses() {
+        const res = await fetch(`${API_URL}/api/teacher/courses`, { headers: authHeaders() });
+        if (!res.ok) await handleError(res, "Failed to load courses");
+        return res.json();
+    },
+
+    async teacherCourseStudents(courseId) {
+        const res = await fetch(`${API_URL}/api/teacher/courses/${courseId}/students`, {
+            headers: authHeaders(),
+        });
+        if (!res.ok) await handleError(res, "Failed to load students");
+        return res.json();
+    },
+
+    async teacherTimetable() {
+        const res = await fetch(`${API_URL}/api/teacher/timetable`, { headers: authHeaders() });
+        if (!res.ok) await handleError(res, "Failed to load timetable");
+        return res.json();
+    },
+
+    async teacherAttendanceSessions() {
+        const res = await fetch(`${API_URL}/api/teacher/attendance/sessions`, {
+            headers: authHeaders(),
+        });
+        if (!res.ok) await handleError(res, "Failed to load sessions");
+        return res.json();
+    },
+
+    async teacherCreateSession(data) {
+        const res = await fetch(`${API_URL}/api/teacher/attendance/sessions`, {
+            method: "POST",
+            headers: authHeaders(),
+            body: JSON.stringify(data),
+        });
+        if (!res.ok) await handleError(res, "Failed to create session");
+        return res.json();
+    },
+
+    async teacherMarkAttendance(sessionId, records) {
+        const res = await fetch(`${API_URL}/api/teacher/attendance/sessions/${sessionId}/mark`, {
+            method: "POST",
+            headers: authHeaders(),
+            body: JSON.stringify({ records }),
+        });
+        if (!res.ok) await handleError(res, "Failed to save attendance");
+        return res.json();
+    },
+
+    async teacherAnnouncements() {
+        const res = await fetch(`${API_URL}/api/teacher/announcements`, { headers: authHeaders() });
+        if (!res.ok) await handleError(res, "Failed to load announcements");
+        return res.json();
+    },
 };
