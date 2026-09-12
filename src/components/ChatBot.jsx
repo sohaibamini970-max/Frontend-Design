@@ -20,7 +20,6 @@ const ChatBot = () => {
     const [isTyping, setIsTyping] = useState(false);
     const messagesEndRef = useRef(null);
 
-    // Reset welcome on role change
     useEffect(() => {
         setMessages([
             {
@@ -31,7 +30,6 @@ const ChatBot = () => {
         ]);
     }, [user?.role]);
 
-    // Auto scroll
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }, [messages, isTyping]);
@@ -72,7 +70,6 @@ const ChatBot = () => {
 
     return (
         <>
-            {/* Chat Window */}
             <div
                 className={`fixed bottom-24 right-6 w-[380px] max-w-[calc(100vw-3rem)] h-[560px] max-h-[calc(100vh-8rem)] bg-white rounded-2xl shadow-2xl border border-gray-200 flex flex-col z-50 overflow-hidden transition-all duration-300 origin-bottom-right ${isOpen
                         ? 'opacity-100 scale-100 pointer-events-auto'
@@ -115,12 +112,12 @@ const ChatBot = () => {
                                 </div>
                             )}
                             <div
-                                className={`max-w-[75%] px-4 py-2.5 rounded-2xl text-sm leading-relaxed whitespace-pre-wrap ${msg.role === 'user'
-                                        ? 'bg-[#2563eb] text-white rounded-br-sm'
+                                className={`max-w-[85%] px-4 py-3 rounded-2xl text-sm leading-relaxed ${msg.role === 'user'
+                                        ? 'bg-[#2563eb] text-white rounded-br-sm whitespace-pre-wrap'
                                         : 'bg-white text-gray-700 border border-gray-200 rounded-bl-sm shadow-sm'
                                     }`}
                             >
-                                {msg.text}
+                                {msg.role === 'user' ? msg.text : <FormattedMessage text={msg.text} />}
                             </div>
                             {msg.role === 'user' && (
                                 <div className="w-7 h-7 rounded-full bg-gray-200 flex items-center justify-center flex-shrink-0 mt-1">
@@ -193,6 +190,49 @@ const ChatBot = () => {
                 )}
             </button>
         </>
+    );
+};
+
+/**
+ * Renders a bot message with proper line breaks and bullet detection.
+ */
+const FormattedMessage = ({ text }) => {
+    if (!text) return null;
+
+    const lines = text.split('\n');
+
+    return (
+        <div className="space-y-1.5">
+            {lines.map((line, i) => {
+                const trimmed = line.trim();
+
+                if (trimmed === '') return <div key={i} className="h-1" />;
+
+                const cleanLine = trimmed.replace(/\*\*(.+?)\*\*/g, '$1');
+
+                if (trimmed.startsWith('•') || trimmed.startsWith('- ') || trimmed.startsWith('* ')) {
+                    const content = cleanLine.replace(/^[•\-\*]\s*/, '');
+                    return (
+                        <div key={i} className="flex gap-2 pl-1">
+                            <span className="text-[#2563eb] font-bold flex-shrink-0">•</span>
+                            <span className="flex-1">{content}</span>
+                        </div>
+                    );
+                }
+
+                const numbered = cleanLine.match(/^(\d+)\.\s+(.+)/);
+                if (numbered) {
+                    return (
+                        <div key={i} className="flex gap-2 pl-1">
+                            <span className="text-[#2563eb] font-bold flex-shrink-0">{numbered[1]}.</span>
+                            <span className="flex-1">{numbered[2]}</span>
+                        </div>
+                    );
+                }
+
+                return <div key={i} className="leading-snug">{cleanLine}</div>;
+            })}
+        </div>
     );
 };
 
