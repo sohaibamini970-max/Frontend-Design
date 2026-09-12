@@ -139,4 +139,36 @@ export const api = {
         if (!res.ok) await handleError(res, "Failed to assign teacher");
         return res.json();
     },
+
+    // =========================================================
+    // ADMIN — Update / Delete
+    // =========================================================
+    async adminUpdateStudent(user_id, data) {
+        const res = await fetch(`${API_URL}/api/admin/students/${user_id}`, {
+            method: "PUT",
+            headers: authHeaders(),
+            body: JSON.stringify(data),
+        });
+        if (!res.ok) await handleError(res, "Failed to update student");
+        return res.json();
+    },
+
+    async adminUpdateTeacher(user_id, data) {
+        const res = await fetch(`${API_URL}/api/admin/teachers/${user_id}`, {
+            method: "PUT",
+            headers: authHeaders(),
+            body: JSON.stringify(data),
+        });
+        if (!res.ok) await handleError(res, "Failed to update teacher");
+        return res.json();
+    },
+
+    async adminDeleteUser(user_id) {
+        const res = await fetch(`${API_URL}/api/admin/users/${user_id}`, {
+            method: "DELETE",
+            headers: authHeaders(),
+        });
+        if (!res.ok) await handleError(res, "Failed to delete user");
+        return res.json();
+    },
 };

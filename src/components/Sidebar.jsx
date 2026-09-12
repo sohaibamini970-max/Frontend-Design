@@ -35,10 +35,7 @@ const Sidebar = () => {
     const navigate = useNavigate();
 
     // ✅ Pick items based on role
-    const navItems =
-        user?.role === 'admin'
-            ? [...baseNavItems, ...adminNavItems]
-            : baseNavItems;
+    const navItems = user?.role === 'admin' ? adminNavItems : baseNavItems;
 
     const handleLogout = () => {
         logout();

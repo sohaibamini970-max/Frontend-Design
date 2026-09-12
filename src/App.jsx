@@ -70,6 +70,14 @@ function App() {
                                 </AdminRoute>
                             }
                         />
+                        <Route
+                            path="admin/manage"
+                            element={
+                                <AdminRoute>
+                                    <AdminManage />
+                                </AdminRoute>
+                            }
+                        />
                     </Route>
 
                     <Route path="*" element={<RootRedirect />} />
