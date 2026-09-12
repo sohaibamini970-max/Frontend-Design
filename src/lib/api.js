@@ -1,5 +1,6 @@
 // Strip trailing slash so we never build "//api/..." URLs
-const API_URL = "https://backend-design.vercel.app".replace(/\/+$/, "");
+// Strip trailing slash so we never build "//api/..." URLs
+export const API_URL = "https://backend-design.vercel.app".replace(/\/+$/, "");
 
 // Build auth headers from stored token
 const authHeaders = () => {
@@ -271,6 +272,26 @@ export const api = {
     async studentProfile() {
         const res = await fetch(`${API_URL}/api/student/profile`, { headers: authHeaders() });
         if (!res.ok) await handleError(res, "Failed to load profile");
+        return res.json();
+    },
+    // =========================================================
+    // CHAT (role-aware AI agent)
+    // =========================================================
+    async chat(message) {
+        const res = await fetch(`${API_URL}/api/chat/`, {
+            method: "POST",
+            headers: authHeaders(),
+            body: JSON.stringify({ message }),
+        });
+        if (!res.ok) await handleError(res, "Chat failed");
+        return res.json();
+    },
+
+    async chatHistory() {
+        const res = await fetch(`${API_URL}/api/chat/history`, {
+            headers: authHeaders(),
+        });
+        if (!res.ok) await handleError(res, "Failed to load chat history");
         return res.json();
     },
 };

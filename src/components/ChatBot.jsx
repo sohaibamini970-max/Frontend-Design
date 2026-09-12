@@ -1,41 +1,49 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { MessageCircle, X, Send, Bot, User, Sparkles } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
+import { api } from '../lib/api';
+
+const WELCOME_BY_ROLE = {
+    admin:
+        "Hi Admin! 👋 I can create students, teachers, and courses for you. Just describe what you need — for example: \"Add a student named Ali Khan, email ali@uni.edu, password ali1234, roll UNI-2024-9999, batch 2024\".",
+    teacher:
+        "Hi! 👋 I can look up your assigned courses and students. Try: \"Show me students in CS301\" or \"List my courses\".",
+    student:
+        "Hi! 👋 Ask me about your attendance, timetable, or courses. Try: \"What's my attendance?\" or \"Show my timetable\".",
+};
 
 const ChatBot = () => {
+    const { user } = useAuth();
     const [isOpen, setIsOpen] = useState(false);
-    const [messages, setMessages] = useState([
-        {
-            id: 1,
-            role: 'bot',
-            text: "Hi Ahmed! 👋 I'm your UniAgent AI assistant. Ask me about your courses, attendance, timetable, or anything university-related!",
-        },
-    ]);
+    const [messages, setMessages] = useState([]);
     const [input, setInput] = useState('');
     const [isTyping, setIsTyping] = useState(false);
     const messagesEndRef = useRef(null);
 
-    // Auto scroll to bottom
+    // Reset welcome on role change
+    useEffect(() => {
+        setMessages([
+            {
+                id: 1,
+                role: 'bot',
+                text: WELCOME_BY_ROLE[user?.role] || "Hi! I'm UniAgent. How can I help?",
+            },
+        ]);
+    }, [user?.role]);
+
+    // Auto scroll
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }, [messages, isTyping]);
 
-    // === Replace this with your real AI Agent API call ===
     const getAIResponse = async (userMessage) => {
-        // Simulate network delay
-        await new Promise((r) => setTimeout(r, 900));
-
-        const lower = userMessage.toLowerCase();
-        if (lower.includes('attendance'))
-            return 'Your overall attendance is 92% 📊. You have 3 absences this semester. Would you like a detailed breakdown?';
-        if (lower.includes('timetable') || lower.includes('schedule'))
-            return 'Your next class is AI Fundamentals at 09:00 AM in Room 401. You have 2 classes today.';
-        if (lower.includes('course'))
-            return 'You are enrolled in 5 courses this semester: AI, Web Dev, Database Systems, Software Engineering, and Data Structures.';
-        if (lower.includes('exam'))
-            return 'Your midterm exams start on June 1st. Check the Announcements page for the full schedule.';
-        if (lower.includes('hello') || lower.includes('hi'))
-            return 'Hello! How can I help you today?';
-        return `I understand you're asking about "${userMessage}". I'm still learning — soon I'll be connected to your university's live data. Try asking about attendance, timetable, courses, or exams!`;
+        try {
+            const data = await api.chat(userMessage);
+            return data.reply || "I didn't get a response. Try again?";
+        } catch (err) {
+            console.error('[ChatBot] request failed:', err);
+            return err.message || "Something went wrong. Please try again.";
+        }
     };
 
     const handleSend = async () => {
@@ -48,7 +56,10 @@ const ChatBot = () => {
         setIsTyping(true);
 
         const botReply = await getAIResponse(trimmed);
-        setMessages((prev) => [...prev, { id: Date.now() + 1, role: 'bot', text: botReply }]);
+        setMessages((prev) => [
+            ...prev,
+            { id: Date.now() + 1, role: 'bot', text: botReply },
+        ]);
         setIsTyping(false);
     };
 
@@ -61,7 +72,7 @@ const ChatBot = () => {
 
     return (
         <>
-            {/* Floating Chat Window */}
+            {/* Chat Window */}
             <div
                 className={`fixed bottom-24 right-6 w-[380px] max-w-[calc(100vw-3rem)] h-[560px] max-h-[calc(100vh-8rem)] bg-white rounded-2xl shadow-2xl border border-gray-200 flex flex-col z-50 overflow-hidden transition-all duration-300 origin-bottom-right ${isOpen
                         ? 'opacity-100 scale-100 pointer-events-auto'
@@ -78,7 +89,7 @@ const ChatBot = () => {
                             <h3 className="font-semibold text-sm">UniAgent AI</h3>
                             <p className="text-xs text-blue-200 flex items-center gap-1">
                                 <span className="w-1.5 h-1.5 rounded-full bg-green-400 inline-block"></span>
-                                Online
+                                {user?.role ? `Connected · ${user.role}` : 'Online'}
                             </p>
                         </div>
                     </div>
@@ -104,7 +115,7 @@ const ChatBot = () => {
                                 </div>
                             )}
                             <div
-                                className={`max-w-[75%] px-4 py-2.5 rounded-2xl text-sm leading-relaxed ${msg.role === 'user'
+                                className={`max-w-[75%] px-4 py-2.5 rounded-2xl text-sm leading-relaxed whitespace-pre-wrap ${msg.role === 'user'
                                         ? 'bg-[#2563eb] text-white rounded-br-sm'
                                         : 'bg-white text-gray-700 border border-gray-200 rounded-bl-sm shadow-sm'
                                     }`}
@@ -119,7 +130,6 @@ const ChatBot = () => {
                         </div>
                     ))}
 
-                    {/* Typing indicator */}
                     {isTyping && (
                         <div className="flex gap-2 justify-start">
                             <div className="w-7 h-7 rounded-full bg-[#0f2a5f] flex items-center justify-center flex-shrink-0 mt-1">
@@ -159,13 +169,14 @@ const ChatBot = () => {
                             <Send size={14} />
                         </button>
                     </div>
-                    <p className="text-[10px] text-gray-400 text-center mt-2">
+                    <p className="text-[10px] text-gray-400 text-center mt-2 flex items-center justify-center gap-1">
+                        <Sparkles size={10} />
                         UniAgent AI can make mistakes. Verify important info.
                     </p>
                 </div>
             </div>
 
-            {/* Floating Toggle Button */}
+            {/* Toggle Button */}
             <button
                 onClick={() => setIsOpen((prev) => !prev)}
                 className="fixed bottom-6 right-6 w-14 h-14 rounded-full bg-[#0f2a5f] hover:bg-[#2563eb] text-white shadow-xl flex items-center justify-center z-50 transition-all duration-300 hover:scale-105 active:scale-95"
@@ -177,7 +188,6 @@ const ChatBot = () => {
                 <div className={`transition-transform duration-300 ${isOpen ? 'rotate-0 scale-100' : '-rotate-90 scale-0 absolute'}`}>
                     <X size={24} />
                 </div>
-                {/* Pulse notification dot */}
                 {!isOpen && (
                     <span className="absolute top-0 right-0 w-4 h-4 bg-green-400 rounded-full border-2 border-white animate-pulse"></span>
                 )}
