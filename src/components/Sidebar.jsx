@@ -11,6 +11,7 @@ import {
     GraduationCap,
     UserPlus,
     BookPlus,
+    Users,
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
@@ -24,6 +25,7 @@ const baseNavItems = [
 ];
 
 const adminNavItems = [
+    { path: '/admin/manage', label: 'Manage Users', icon: Users },
     { path: '/admin/students', label: 'Add Student', icon: UserPlus },
     { path: '/admin/teachers', label: 'Add Teacher', icon: UserPlus },
     { path: '/admin/courses', label: 'Add Course', icon: BookPlus },
