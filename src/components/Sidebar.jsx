@@ -9,10 +9,12 @@ import {
     Megaphone,
     LogOut,
     GraduationCap,
+    UserPlus,
+    BookPlus,
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
-const navItems = [
+const baseNavItems = [
     { path: '/', label: 'Dashboard', icon: LayoutDashboard },
     { path: '/profile', label: 'Profile', icon: User },
     { path: '/attendance', label: 'Attendance', icon: CalendarCheck },
@@ -28,13 +30,15 @@ const adminNavItems = [
 ];
 
 const Sidebar = () => {
-    // ✅ Hooks must be INSIDE the component
-    const { logout } = useAuth();
+    // ✅ Hooks INSIDE the component
+    const { user, logout } = useAuth();
     const navigate = useNavigate();
 
-    const navItems = user?.role === 'admin'
-        ? [...baseNavItems, ...adminNavItems]
-        : baseNavItems;
+    // ✅ Pick items based on role
+    const navItems =
+        user?.role === 'admin'
+            ? [...baseNavItems, ...adminNavItems]
+            : baseNavItems;
 
     const handleLogout = () => {
         logout();
@@ -60,6 +64,7 @@ const Sidebar = () => {
                     <NavLink
                         key={path}
                         to={path}
+                        end={path === '/'}
                         className={({ isActive }) =>
                             `flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all ${isActive
                                 ? 'bg-[#0f2a5f] text-white shadow-md'
