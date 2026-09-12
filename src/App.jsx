@@ -3,13 +3,6 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import ProtectedRoute from './components/protectedRoute';
 import Layout from './components/layout';
-import LoginPage from './pages/LoginPage';
-import Dashboard from './pages/Dashboard';
-import Profile from './pages/Profile';
-import Attendance from './pages/Attendance';
-import Timetable from './pages/Timetable';
-import Courses from './pages/Courses';
-import Announcements from './pages/Announcements';
 
 import AdminRoute from './components/AdminRoute';
 import AdminStudents from './pages/admin/AdminStudents';
@@ -24,6 +17,14 @@ import TeacherCourses from './pages/teacher/TeacherCourses';
 import TeacherAttendance from './pages/teacher/TeacherAttendance';
 import TeacherTimetable from './pages/teacher/TeacherTimetable';
 import TeacherAnnouncements from './pages/teacher/TeacherAnnouncements';
+
+import StudentDashboard from './pages/student/StudentDashboard';
+import StudentProfile from './pages/student/StudentProfile';
+import StudentCourses from './pages/student/StudentCourses';
+import StudentAttendance from './pages/student/StudentAttendance';
+import StudentTimetable from './pages/student/StudentTimetable';
+import StudentAnnouncements from './pages/student/StudentAnnouncements';
+import StudentRoute from './components/StudentRoute';
 
 const RootRedirect = () => {
     const { user, loading } = useAuth();
@@ -97,6 +98,13 @@ function App() {
                         <Route path="teacher/attendance" element={<TeacherRoute><TeacherAttendance /></TeacherRoute>} />
                         <Route path="teacher/timetable" element={<TeacherRoute><TeacherTimetable /></TeacherRoute>} />
                         <Route path="teacher/announcements" element={<TeacherRoute><TeacherAnnouncements /></TeacherRoute>} />
+
+                        <Route index element={<StudentRoute><StudentDashboard /></StudentRoute>} />
+                        <Route path="profile" element={<StudentRoute><StudentProfile /></StudentRoute>} />
+                        <Route path="courses" element={<StudentRoute><StudentCourses /></StudentRoute>} />
+                        <Route path="attendance" element={<StudentRoute><StudentAttendance /></StudentRoute>} />
+                        <Route path="timetable" element={<StudentRoute><StudentTimetable /></StudentRoute>} />
+                        <Route path="announcements" element={<StudentRoute><StudentAnnouncements /></StudentRoute>} />
                     </Route>
 
                     <Route path="*" element={<RootRedirect />} />

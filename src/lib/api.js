@@ -234,4 +234,43 @@ export const api = {
         if (!res.ok) await handleError(res, "Failed to load announcements");
         return res.json();
     },
+
+    // =========================================================
+    // STUDENT
+    // =========================================================
+    async studentDashboard() {
+        const res = await fetch(`${API_URL}/api/student/dashboard`, { headers: authHeaders() });
+        if (!res.ok) await handleError(res, "Failed to load dashboard");
+        return res.json();
+    },
+
+    async studentCourses() {
+        const res = await fetch(`${API_URL}/api/student/courses`, { headers: authHeaders() });
+        if (!res.ok) await handleError(res, "Failed to load courses");
+        return res.json();
+    },
+
+    async studentAttendance() {
+        const res = await fetch(`${API_URL}/api/student/attendance`, { headers: authHeaders() });
+        if (!res.ok) await handleError(res, "Failed to load attendance");
+        return res.json();
+    },
+
+    async studentTimetable() {
+        const res = await fetch(`${API_URL}/api/student/timetable`, { headers: authHeaders() });
+        if (!res.ok) await handleError(res, "Failed to load timetable");
+        return res.json();
+    },
+
+    async studentAnnouncements() {
+        const res = await fetch(`${API_URL}/api/student/announcements`, { headers: authHeaders() });
+        if (!res.ok) await handleError(res, "Failed to load announcements");
+        return res.json();
+    },
+
+    async studentProfile() {
+        const res = await fetch(`${API_URL}/api/student/profile`, { headers: authHeaders() });
+        if (!res.ok) await handleError(res, "Failed to load profile");
+        return res.json();
+    },
 };

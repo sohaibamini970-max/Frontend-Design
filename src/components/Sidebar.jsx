@@ -31,6 +31,15 @@ const teacherNavItems = [
     { path: '/teacher/announcements', label: 'Announcements', icon: Megaphone },
 ]; 
 
+const studentNavItems = [
+    { path: '/', label: 'Dashboard', icon: LayoutDashboard },
+    { path: '/profile', label: 'Profile', icon: User },
+    { path: '/attendance', label: 'Attendance', icon: CalendarCheck },
+    { path: '/timetable', label: 'Timetable', icon: Clock },
+    { path: '/courses', label: 'Courses', icon: BookOpen },
+    { path: '/announcements', label: 'Announcements', icon: Megaphone },
+];
+
 const Sidebar = () => {
     // ✅ Hooks INSIDE the component
     const { user, logout } = useAuth();
@@ -40,7 +49,7 @@ const Sidebar = () => {
     const navItems =
         user?.role === 'admin' ? adminNavItems :
             user?.role === 'teacher' ? teacherNavItems :
-                baseNavItems;
+                studentNavItems;
 
     const handleLogout = () => {
         logout();
