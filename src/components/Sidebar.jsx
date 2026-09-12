@@ -95,7 +95,7 @@ const Sidebar = ({ isOpen, onClose }) => {
         `}
             >
                 {/* Logo + close (mobile) */}
-                <div className="flex items-center justify-between px-2 mb-8">
+                <div className="flex items-center justify-between px-2 mb-6 flex-shrink-0">
                     <div className="flex items-center gap-3">
                         <div className="w-10 h-10 rounded-lg bg-[#0f2a5f] flex items-center justify-center">
                             <GraduationCap className="text-white" size={22} />
@@ -117,7 +117,7 @@ const Sidebar = ({ isOpen, onClose }) => {
                 </div>
 
                 {/* Navigation */}
-                <nav className="flex-1 space-y-1 overflow-y-auto">
+                <nav className="space-y-1 overflow-y-auto flex-shrink-0">
                     {navItems.map(({ path, label, icon: Icon }) => (
                         <NavLink
                             key={path}
@@ -136,10 +136,13 @@ const Sidebar = ({ isOpen, onClose }) => {
                     ))}
                 </nav>
 
+                {/* Spacer — keeps logout near nav on short screens, pushes down on tall screens */}
+                <div className="flex-1 min-h-4" />
+
                 {/* Logout */}
                 <button
                     onClick={handleLogout}
-                    className="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-red-500 hover:bg-red-50 transition-all mt-4 border-t border-gray-100 pt-5"
+                    className="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-red-500 hover:bg-red-50 transition-all border-t border-gray-100 pt-5 flex-shrink-0"
                 >
                     <LogOut size={18} />
                     <span>Logout</span>
