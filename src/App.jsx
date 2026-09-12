@@ -2,11 +2,11 @@ import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 
-import ProtectedRoute from './components/ProtectedRoute';
+import ProtectedRoute from './components/protectedRoute';
 import AdminRoute from './components/AdminRoute';
 import TeacherRoute from './components/TeacherRoute';
 import StudentRoute from './components/StudentRoute';
-import Layout from './components/Layout';
+import Layout from './components/layout';
 import LoginPage from './pages/LoginPage';
 
 // ---- Admin pages ----
